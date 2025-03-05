@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+   <style>
+ /* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    min-height: 100vh;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+/* Container Styling */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Heading */
+h1 {
+    font-size: 2.5rem;
+    color: #4854ff;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Buttons Styling */
+a.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    margin: 10px;
+    background-color: #4854ff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+a.btn:hover {
+    background-color: #6e7dff;
+}
+
+a.btn:active {
+    transform: scale(0.98);
+}
+
+/* Health Data Table Styling */
+h2 {
+    font-size: 2rem;
+    margin: 20px 0;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+th {
+    background-color: #4854ff;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Bottom Section Styling */
+.bottom-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    flex-wrap: wrap; /* Ensure it wraps on smaller screens */
+}
+
+.visualization, .recommendation {
+    width: 48%;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.visualization h3, .recommendation h3 {
+    color: #4854ff;
+    margin-bottom: 15px;
+}
+
+.visualization img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.recommendation p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Ensure the buttons stay at the top */
+.buttons-container {
+    text-align: center;
+    margin-bottom: 30px; /* Ensure some space before the table */
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .bottom-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .visualization, .recommendation {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    a.btn {
+        font-size: 1rem;
+    }
+}
+
+   </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ current_user.username }}</h1>
+        <a href="{{ url_for('add_data') }}" class="btn">Add Health Data</a>
+        <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+
+        <!-- Health Data Table -->
+        <h2>Your Health Data</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pulse</th>
+                    <th>Blood Pressure</th>
+                    <th>Weight</th>
+                    <th>Activity Level</th>
+                    <th>Recommendation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in health_data %}
+                <tr>
+                    <td>{{ data.pulse }}</td>
+                    <td>{{ data.blood_pressure }}</td>
+                    <td>{{ data.weight }}</td>
+                    <td>{{ data.activity_level }}</td>
+                    <td>{{ data.recommendation }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Bottom Section: Visualizations and Recommendation -->
+        <div class="bottom-section">
+            <!-- Visualization (Pie Chart or Graph) -->
+            <div class="visualization">
+                <h3>Health Data Visualization</h3>
+                <img src="{{ url_for('health_data_plot') }}" alt="Health Data Visualization">
+            </div>
+
+            <!-- Latest Recommendation -->
+            <div class="recommendation">
+                <h3>Latest Recommendation</h3>
+                <p>{{ latest_recommendation }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
